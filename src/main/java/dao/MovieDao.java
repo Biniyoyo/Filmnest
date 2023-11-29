@@ -25,7 +25,7 @@ public class MovieDao {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             // Step 2: Establish the connection
-            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/filmnest-db", "root", "Ethiopia00@");
+            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/filmnest-db", "root", "");
                  Statement statement = connection.createStatement()) {
 
                 // Step 3: Execute the query to get all movies

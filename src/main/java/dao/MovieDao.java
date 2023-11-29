@@ -66,17 +66,41 @@ public class MovieDao {
 		 */
 
 		Movie movie = new Movie();
-		
-		/*Sample data begins*/
-		movie.setMovieID(1);
-		movie.setMovieName("The Godfather");
-		movie.setMovieType("Drama");
-		movie.setDistFee(10000);
-		movie.setNumCopies(3);
-		movie.setRating(5);
-		/*Sample data ends*/
-		
-		return movie;
+
+//        try {
+//            // Step 1: Load the JDBC driver
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//
+//            // Step 2: Establish the connection
+//            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/filmnest-db", "root", "Ethiopia00@");
+//                 PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Movie WHERE ID = ?")) {
+//
+//                // Set the movieID as a parameter for the PreparedStatement
+//                preparedStatement.setInt(1, Integer.parseInt(movieID));
+//
+//                // Execute the query
+//                ResultSet resultSet = preparedStatement.executeQuery();
+//
+//                // Check if the result set is not empty
+//                if (resultSet.next()) {
+//                    // Populate Movie object from the result set
+//                    movie.setMovieID(resultSet.getInt("ID"));
+//                    movie.setMovieName(resultSet.getString("Name"));
+//                    movie.setMovieType(resultSet.getString("Type"));
+//                    movie.setDistFee(resultSet.getInt("DistrFee"));
+//                    movie.setNumCopies(resultSet.getInt("NumCopies"));
+//                    movie.setRating(resultSet.getInt("Rating"));
+//                } else {
+//                    // Handle the case when no movie with the given ID is found
+//                    System.out.println("Movie with ID " + movieID + " not found.");
+//                }
+//
+//            }
+//        } catch (Exception e) {
+//            System.err.println("Error: " + e.getMessage());
+//        }
+
+        return movie;
 	}
 	
 	public String addMovie(Movie movie) {
@@ -139,7 +163,40 @@ public class MovieDao {
 		 */
 		
 		/*Sample data begins*/
-		return "success";
+		try {
+            // Step 1: Load the JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Step 2: Establish the connection
+            try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/filmnest-db?autoReconnect=true&useSSL=false", "root", "Ethiopia00@");
+                 PreparedStatement preparedStatement = connection.prepareStatement(
+                         "UPDATE Movie SET Name=?, Type=?, DistrFee=?, NumCopies=?, Rating=? WHERE ID=?")) {
+
+                // Set values for the PreparedStatement
+                preparedStatement.setString(1, movie.getMovieName());
+                preparedStatement.setString(2, movie.getMovieType());
+                preparedStatement.setInt(3, movie.getDistFee());
+                preparedStatement.setInt(4, movie.getNumCopies());
+                preparedStatement.setInt(5, movie.getRating());
+                preparedStatement.setInt(6, movie.getMovieID());
+
+                // Execute the update
+                int rowsAffected = preparedStatement.executeUpdate();
+
+                // Check if the update was successful
+                if (rowsAffected > 0) {
+                	System.out.println("Success");
+                	return "success";
+                } else {
+                	System.out.println(movie.getMovieID());
+                	return "failure"; 
+                }
+            }
+
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            return "Error";
+        }
 		/*Sample data ends*/
 
 	}
@@ -152,6 +209,7 @@ public class MovieDao {
 		 */
 		
 		/*Sample data begins*/
+		
 		return "success";
 		/*Sample data ends*/
 
